@@ -1,10 +1,23 @@
-## Multi stage jhipster environmet configured with ansible
+## Multi stage jhipster environment configured with ansible
 
-spin up nexus repository with docker
+### What it does
+- jhipster pom modified to deploy artifacts to maven
+- ansible playbook to install and configure a mariadb database
+- ansible playbook to install jhipster app as systemctl (directly from maven)
+- ansible directory structure for multi stage environment
+
+### To Do
+- improving multi stage environment configuration
+- add reverse proxy/load balancing features
+- use ansible vault
+
+### Steps
+
+spin up nexus repository
 
 `docker run -d -p 8081:8081 --name nexus sonatype/nexus:oss`
 
-configure maven credentials into maven settings.xml 
+configure maven credentials into your maven settings.xml 
 
 ```
 <server>
@@ -34,5 +47,6 @@ got to `http://localhost:8080`
 
 
 Useful links:
+
 https://www.digitalocean.com/community/tutorials/how-to-manage-multistage-environments-with-ansible
 
