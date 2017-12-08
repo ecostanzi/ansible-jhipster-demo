@@ -1,0 +1,7 @@
+---
+java_maven_repo: "{{maven_snapshots_repo}}"
+java_app_version: latest
+
+java_app_jdbc_url: "jdbc:mariadb://localhost:3306/{{database_schema}}"
+java_app_db_user: "{{database_user}}"
+java_app_db_password: "{{database_password}}"

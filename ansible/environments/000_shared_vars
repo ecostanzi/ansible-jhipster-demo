@@ -1,0 +1,17 @@
+---
+maven_releases_repo: http://localhost:8081/nexus/content/repositories/releases
+maven_snapshots_repo: http://localhost:8081/nexus/content/repositories/snapshots
+
+java_app_group_id: org.ecostanzi.jhipstersample
+java_app_artifact_id: jhipstersample
+
+java_app_home: /opt/jhipster
+java_app_user: jhipster
+java_app_name: jhipster-sample
+java_app_server_addr: 0.0.0.0
+java_app_server_port: 8080
+
+
+database_user: root
+database_password: 
+database_schema: jhipstersample

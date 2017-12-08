@@ -1,0 +1,17 @@
+[Unit]
+Description=Sample Jhipster App
+After=syslog.target network.target
+
+[Service]
+Type=idle
+
+WorkingDirectory={{java_app_home}}
+ExecStart=/usr/bin/java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=prod -Xmx1024m -jar {{java_app_name}}.war
+User={{java_app_user}}
+Group={{java_app_user}}
+
+TimeoutStartSec=60
+TimeoutStopSec=20
+
+[Install]
+WantedBy=multi-user.target

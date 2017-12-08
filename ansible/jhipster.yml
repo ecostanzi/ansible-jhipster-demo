@@ -1,0 +1,74 @@
+---
+- name: Setting up jhipster
+  hosts: java
+  tasks:
+    - debug:
+        msg: "Running jhipster playbook in environment {{ env }}"
+    
+    - name: Installing required packages
+      yum:
+        name: "{{item}}"
+        state: present
+      become: true
+      with_items:
+        - epel-release
+        - vim
+        - mariadb-server
+        - htop
+        - java-1.8.0-openjdk
+
+    - name: Adding user
+      user: name={{java_app_user}} state=present
+      become: true
+
+    - name: Creating jhipster app directory
+      file: name={{item}} state=directory owner={{java_app_user}} group={{java_app_user}}
+      become: true
+      with_items:
+        - "{{java_app_home}}"
+        - "{{java_app_home}}/config"
+        - "{{java_app_home}}/logs"
+
+    - name: Copying systemctl script
+      template: src=templates/jhipster/app.service.j2 dest=/etc/systemd/system/{{java_app_name}}.service
+      become: true
+      notify:
+        - reload sysctl daemon
+        - restart app
+    
+    - name: Enabling app on startup
+      become: true
+      service: name={{java_app_name}} state=started enabled=yes
+
+    - name: downloading war locally
+      local_action:
+        module: maven_artifact
+        repository_url: "{{java_maven_repo}}"
+        group_id: "{{java_app_group_id}}"
+        artifact_id: "{{java_app_artifact_id}}"
+        extension: war
+        version: "{{java_app_version}}"
+        dest: /tmp/{{java_app_name}}.war
+
+    - name: uploading updated war
+      copy: src=/tmp/{{java_app_name}}.war dest={{java_app_home}}/{{java_app_name}}.war owner={{java_app_user}} group={{java_app_user}}
+      become: true
+      notify: restart app
+
+    - name: copy logfile configuration
+      template: src=templates/jhipster/logback-spring.xml.j2 dest={{java_app_home}}/config/logback-spring.xml owner={{java_app_user}} group={{java_app_user}}
+      become_user: "{{java_app_user}}"
+      become: true
+      notify: restart app
+
+    - name: copy configuration file
+      template: src=templates/jhipster/application-prod.yml.j2 dest={{java_app_home}}/config/application-prod.yml owner={{java_app_user}} group={{java_app_user}}
+      become_user: "{{java_app_user}}"
+      become: true
+      notify: restart app
+    
+  handlers:
+    - name: restart app
+      service: name={{java_app_name}} state=restarted
+    - name: reload sysctl daemon
+      shell: systemctl daemon-reload

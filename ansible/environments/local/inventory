@@ -1,0 +1,7 @@
+vagrant ansible_host=localhost ansible_user=vagrant ansible_port=2222 ansible_ssh_private_key_file=/home/enrico/.vagrant.d/insecure_private_key
+
+[java]
+vagrant
+
+[database]
+vagrant

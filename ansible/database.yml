@@ -1,0 +1,40 @@
+---
+- name: Setting up mariadb database
+  hosts: database
+  become: true
+  tasks:
+    - debug:
+        msg: "Running jhipster playbook in environment {{ env }}"
+
+    - name: epel epel-release
+      become: true
+      yum: 
+        name: epel-release
+        state: present
+    
+    - name: Installing required packages
+      yum:
+        name: "{{item}}"
+        state: present
+      become: true
+      with_items:
+        - MySQL-python
+        - mariadb-server
+    
+    - name: Enabling app on startup
+      become: true
+      service: name=mariadb state=started enabled=yes
+
+    - name: Create a new database 
+      mysql_db:
+        name: "{{database_schema}}"
+        state: present
+    
+    - name: adding application user
+      mysql_user:
+        name: "{{database_user}}"
+        password: "{{database_password}}"
+        priv: '{{database_schema}}.*:ALL'
+        state: present
+
+    
