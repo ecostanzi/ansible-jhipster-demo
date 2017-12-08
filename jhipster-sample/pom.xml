@@ -4,7 +4,7 @@
 
     <groupId>org.ecostanzi.jhipstersample</groupId>
     <artifactId>jhipstersample</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Jhipstersample</name>
 
@@ -610,6 +610,20 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>maven.localhost</id>
+            <name>ReleaseRepo</name>
+            <url>http://localhost:8081/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven.localhost</id>
+            <name>SnapshotRepo</name>
+            <url>http://localhost:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <profiles>
         <profile>
             <id>no-liquibase</id>
